@@ -1,0 +1,9 @@
+# Tooling config only — this project is NOT an installable package. The service
+# is consumed over its HTTP API; `pgfoundation` and `pgfoundation_service` are
+# imported from this directory (see README).
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-ra"

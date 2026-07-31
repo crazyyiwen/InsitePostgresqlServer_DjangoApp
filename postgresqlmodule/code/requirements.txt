@@ -1,0 +1,21 @@
+# pgfoundation-service dependencies.
+#
+# Nothing here is an installable package — install these into the venv, then run
+# the service from this directory (see README). Constraints carried over from the
+# former pyproject.toml files.
+
+# --- foundation core ---
+psycopg[binary,pool]>=3.2
+pydantic>=2.7
+pydantic-settings>=2.3
+pyyaml>=6.0                 # YAML config loader (code/config/*.yaml)
+
+# --- service shell ---
+django>=5.0
+apispec>=6.6
+uvicorn[standard]>=0.30     # ASGI server used by pgfoundation_service.run_local
+
+# --- dev / test ---
+pytest>=8.0
+pytest-asyncio>=0.23
+import-linter>=2.0          # architecture contracts (.importlinter)

@@ -1,0 +1,52 @@
+{
+  // VS Code launch configurations for pgfoundation (localhost).
+  // Requires the Python extension + the dependencies installed into
+  // postgresqlmodule/venv314 (see README §1):
+  //   venv314/Scripts/python -m pip install -r postgresqlmodule/code/requirements.txt
+  // There is nothing to install from this repo itself — the entry points put
+  // postgresqlmodule/code on sys.path themselves.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "pgfoundation-service (localhost:8600)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pgfoundation_service.run_local",
+      "python": "${workspaceFolder}/postgresqlmodule/venv314/Scripts/python.exe",
+      "cwd": "${workspaceFolder}/postgresqlmodule/code",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "DJANGO_SETTINGS_MODULE": "pgfoundation_service.settings",
+        "PGF_CONFIG": "${workspaceFolder}/postgresqlmodule/code/config/pgfoundation.yaml",
+        "PGF_HOST": "127.0.0.1",
+        "PGF_PORT": "8600"
+      }
+    },
+    {
+      "name": "pytest: all (unit + service)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-q"],
+      "python": "${workspaceFolder}/postgresqlmodule/venv314/Scripts/python.exe",
+      "cwd": "${workspaceFolder}/postgresqlmodule/code",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "pytest: incl. live PostgreSQL integration",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-q"],
+      "python": "${workspaceFolder}/postgresqlmodule/venv314/Scripts/python.exe",
+      "cwd": "${workspaceFolder}/postgresqlmodule/code",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PGF_TEST_DSN": "postgresql://fshadmin:fshadmin@localhost:5434/agentworkflowbuilder"
+      }
+    }
+  ]
+}

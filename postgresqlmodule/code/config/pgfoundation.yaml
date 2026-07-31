@@ -1,0 +1,21 @@
+# pgfoundation — LOCAL config used by the VS Code launch target.
+# Edit the dsn below to point at your local PostgreSQL. Keep real secrets out of
+# git for anything but local dev (use ${env:VAR} instead — see the .example file).
+
+datasources:
+  - name: main
+    # The `energydata` database lives in the running container on port 5434
+    # (there is a black-hole listener on 5432 that times out — not a real PG).
+    dsn: postgresql://fshadmin:fshadmin@localhost:5434/energydata
+    role: standalone
+    pool: { min_size: 1, max_size: 10, acquire_timeout_seconds: 5 }
+
+resilience:
+  retry: { max_attempts: 3, base_backoff_ms: 20, jitter: true }
+  circuit_breaker: { enabled: true, failure_threshold: 5, reset_timeout_seconds: 30 }
+
+auth:
+  enabled: false          # pluggable seam, disabled for local dev (ADR-013)
+
+observability:
+  provider: none          # no-op; bind an external log project to collect (ADR-014)

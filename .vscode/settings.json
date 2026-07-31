@@ -1,0 +1,12 @@
+{
+  // Point the editor at the project's virtualenv so imports resolve and the
+  // "package not installed" hints disappear.
+  "python.defaultInterpreterPath": "${workspaceFolder}/postgresqlmodule/venv314/Scripts/python.exe",
+  // Nothing is pip-installed from this repo; postgresqlmodule/code is the import
+  // root (the entry points add it to sys.path at runtime).
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/postgresqlmodule/code"
+  ],
+  "python.testing.pytestEnabled": true,
+  "python.testing.cwd": "${workspaceFolder}/postgresqlmodule/code"
+}

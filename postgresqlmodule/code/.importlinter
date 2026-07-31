@@ -1,0 +1,50 @@
+[importlinter]
+root_package = pgfoundation
+include_external_packages = True
+
+[importlinter:contract:layers]
+name = Layered architecture — dependencies point inward only (doc 03)
+type = layers
+layers =
+    _internal.api
+    _internal.access
+    _internal.connection
+    _internal.config
+    core
+containers =
+    pgfoundation
+
+[importlinter:contract:core-purity]
+name = Core purity — core imports no driver / web framework (doc 12 §12.3)
+type = forbidden
+source_modules =
+    pgfoundation.core
+forbidden_modules =
+    psycopg
+    psycopg_pool
+    django
+    apispec
+
+[importlinter:contract:driver-isolation]
+name = Driver isolation — pure layers never import psycopg (only drivers + the composition root do)
+type = forbidden
+source_modules =
+    pgfoundation.core
+    pgfoundation._internal.config
+    pgfoundation._internal.connection
+    pgfoundation._internal.access
+    pgfoundation._internal.resilience
+    pgfoundation._internal.observability
+forbidden_modules =
+    psycopg
+    psycopg_pool
+# NOTE: _internal.api (the DataFoundation Facade) is the composition root / DI
+# container (doc 02 L3) — the one place allowed to select the concrete driver.
+
+[importlinter:contract:no-web-framework-in-core-lib]
+name = Django never appears in the core library (ADR-012)
+type = forbidden
+source_modules =
+    pgfoundation
+forbidden_modules =
+    django

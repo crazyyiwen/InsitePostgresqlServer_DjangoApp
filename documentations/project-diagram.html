@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pgfoundation — Project Diagram</title>
+<script>try{var t=localStorage.getItem('pgf-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#656d76;--border:#d0d7de;--sidebar-bg:#f6f8fa;--link:#0969da;--code-bg:#f6f8fa;--th-bg:#f6f8fa;--accent:#0969da;--card:#f6f8fa;--pre-bg:#f6f8fa;}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--muted:#8b949e;--border:#30363d;--sidebar-bg:#0d1117;--link:#4493f8;--code-bg:#161b22;--th-bg:#161b22;--accent:#4493f8;--card:#161b22;--pre-bg:#161b22;}}
+:root[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--muted:#8b949e;--border:#30363d;--sidebar-bg:#0d1117;--link:#4493f8;--code-bg:#161b22;--th-bg:#161b22;--accent:#4493f8;--card:#161b22;--pre-bg:#161b22;}
+:root[data-theme=light]{--bg:#fff;--fg:#1f2328;--muted:#656d76;--border:#d0d7de;--sidebar-bg:#f6f8fa;--link:#0969da;--code-bg:#f6f8fa;--th-bg:#f6f8fa;--accent:#0969da;--card:#f6f8fa;--pre-bg:#f6f8fa;}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:300px;flex:0 0 300px;background:var(--sidebar-bg);border-right:1px solid var(--border);height:100vh;position:sticky;top:0;overflow-y:auto}
+.sidebar .brand{padding:18px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--sidebar-bg);z-index:2}
+.sidebar .brand b{display:block;font-size:14px}.sidebar .brand span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.sidebar nav{padding:10px 0 40px}
+.sidebar a.toc{display:block;padding:5px 20px;color:var(--fg);font-size:13px;border-left:3px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar a.toc.h3{padding-left:36px;font-size:12.5px;color:var(--muted)}
+.sidebar a.toc:hover{background:rgba(127,127,127,.12);text-decoration:none}
+.sidebar a.toc.active{border-left-color:var(--accent);color:var(--accent);font-weight:600;background:rgba(9,105,218,.08)}
+.content{flex:1 1 auto;min-width:0;padding:0 48px 120px;max-width:1040px;margin:0 auto}
+.pagehead{padding:36px 0 8px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.pagehead h1{font-size:28px;margin:0 0 6px}.pagehead p{color:var(--muted);margin:0;font-size:14px}
+.toolbar{margin:14px 0 0;display:flex;gap:10px;flex-wrap:wrap}
+.toolbar button{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--fg);padding:6px 12px;border-radius:6px;font-size:13px}
+.toolbar button:hover{border-color:var(--accent);color:var(--accent)}
+.rendered h1{font-size:25px;padding-bottom:.3em;border-bottom:1px solid var(--border);margin:.6em 0 .6em}
+.rendered h2{font-size:20px;padding-bottom:.3em;border-bottom:1px solid var(--border);margin:1.7em 0 .6em;scroll-margin-top:12px}
+.rendered h3{font-size:16px;margin:1.4em 0 .5em;scroll-margin-top:12px}
+.rendered p{margin:.6em 0}.rendered ul,.rendered ol{padding-left:1.6em;margin:.5em 0}.rendered li{margin:.2em 0}
+.rendered blockquote{margin:.8em 0;padding:.2em 1em;color:var(--muted);border-left:4px solid var(--border);background:var(--card)}
+.rendered code{background:var(--code-bg);padding:.15em .4em;border-radius:5px;font-size:85%;font-family:ui-monospace,Consolas,monospace}
+.rendered pre{background:var(--pre-bg);border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow-x:auto}
+.rendered pre code{background:none;padding:0;font-size:13px}
+.rendered table{border-collapse:collapse;display:block;overflow-x:auto;margin:1em 0;font-size:14px;max-width:100%}
+.rendered th,.rendered td{border:1px solid var(--border);padding:7px 12px;text-align:left;vertical-align:top}
+.rendered th{background:var(--th-bg);font-weight:600}.rendered tr:nth-child(even) td{background:rgba(127,127,127,.05)}
+.rendered img{max-width:100%}
+.mermaid{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin:1em 0;overflow-x:auto;text-align:center}
+.anchor{visibility:hidden;font-size:.8em;margin-left:.35em;color:var(--muted)}
+.rendered h2:hover .anchor,.rendered h3:hover .anchor{visibility:visible}
+.menu-btn{display:none}
+@media (max-width:900px){.sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:transform .2s}.sidebar.open{transform:translateX(0)}.content{padding:0 18px 100px}.menu-btn{display:inline-flex;position:fixed;top:12px;right:12px;z-index:60;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 14px;cursor:pointer}}
+@media print{.sidebar,.toolbar,.menu-btn{display:none!important}.content{max-width:none;padding:0}a{color:inherit}}
+</style>
+</head>
+<body>
+<button class="menu-btn" id="menuBtn">&#9776; Contents</button>
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="brand"><b>pgfoundation</b><span>Architecture · layers · request flow · deployment</span></div>
+    <nav id="toc"></nav>
+  </nav>
+  <main class="content">
+    <div class="pagehead"><h1>pgfoundation — Project Diagram</h1><p>Architecture · layers · request flow · deployment</p>
+      <div class="toolbar">
+        <button onclick="window.print()">&#128424; Print / Save as PDF</button>
+        <button onclick="toggleTheme()">Toggle theme</button>
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
+      </div>
+    </div>
+    <div class="rendered" id="content"></div>
+    <script type="text/markdown" id="src"># pgfoundation — Project Diagram
+
+Visual overview of the **PostgreSQL Database Foundation Server**: its packages,
+layers, adapters, external systems, request flow, and deployment. See
+[HOW-IT-WORKS](./adr/HOW-IT-WORKS.md) for the narrated walkthrough and
+[the design docs](./README.md) for rationale.
+
+---
+
+## 1. System architecture
+
+Two packages from one codebase; dependencies point **inward** to a pure core.
+Everything at the edges (psycopg, Django, log/auth projects) is a swappable adapter.
+
+```mermaid
+graph TB
+    subgraph clients[Consumers]
+      PYAPP[Python app<br/>imports the library]
+      REST[REST client · browser · AI agent]
+      OPS[SRE / dashboards]
+    end
+
+    subgraph shell["pgfoundation_service — plain Django (ASGI) · L4 delivery"]
+      VIEWS["async views<br/>/view · /function · /procedure<br/>/query · /execute · /health"]
+      AUTH[AuthGate seam<br/>disabled by default]
+      OAPI["OpenAPI (apispec + Pydantic DTOs)<br/>/openapi.json · /docs"]
+      ERR[error translation<br/>Core error → HTTP status]
+    end
+
+    subgraph lib[pgfoundation — core library · framework-free]
+      FAC["L3 · DataFoundation Facade + DataSourceHandle"]
+      ACC["L2 · Access<br/>invocation compilers · Unit of Work · run_transaction<br/>interval · watermark · repository"]
+      L1["L1 · ConnectionRegistry + PoolFactory"]
+      DEC["decorators<br/>MeteredPool → ResilientPool (circuit breaker)"]
+      DRV["driver adapter · psycopg 3"]
+      CORE["Core · ports · models · errors<br/>(stdlib only, zero deps)"]
+    end
+
+    subgraph ext[External systems / seams]
+      PG[("PostgreSQL<br/>N named data sources")]
+      LOG["external log / observability project<br/>(MetricsPort · LoggerPort · TracerPort)"]
+      AUTHP["external auth project<br/>(Authenticator/Authorizer ports)"]
+    end
+
+    subgraph deferred[Deferred — separate higher-level projects]
+      SEM["Semantic & Serving Layer"]
+      TS["Time-Series server (TimescaleDB)"]
+    end
+
+    PYAPP --> FAC
+    REST --> VIEWS
+    OPS --> OAPI
+    VIEWS --> AUTH --> FAC
+    OAPI -.describes/validates.-> VIEWS
+    ERR -.wraps.-> VIEWS
+    FAC --> ACC --> L1 --> DEC --> DRV --> PG
+    ACC -. uses ports .-> CORE
+    L1 -. uses ports .-> CORE
+    DRV -. implements DriverPort .-> CORE
+    DEC -. emits metrics .-> LOG
+    AUTHP -. registers adapters .-> AUTH
+    SEM -. would depend on .-> FAC
+    TS -. would depend on .-> FAC
+
+    style CORE fill:#2da44e,color:#fff
+    style lib fill:#0d3,opacity:0.06
+    style deferred stroke-dasharray:4 4,color:#8b949e
+```
+
+---
+
+## 2. Layered dependency rule (inward only)
+
+Enforced in CI by import-linter contracts: the core imports only stdlib; psycopg
+lives only in the driver adapter; Django never enters the core library.
+
+```mermaid
+graph LR
+    L4["L4 · Delivery<br/>(Django shell)"] --> L3
+    L3["L3 · Facade / API"] --> L2
+    L2["L2 · Access<br/>(execute, UoW, invocation, streaming)"] --> L1
+    L1["L1 · Connection<br/>(registry, pools, decorators)"] --> L0
+    L0["L0 · Config<br/>(settings, loader)"] --> CORE
+    L4 -.-> CORE
+    L3 -.-> CORE
+    L2 -.-> CORE
+    L1 -.-> CORE
+    CORE["Core (ports · models · errors)"]
+    XCUT["cross-cutting: resilience · observability"]
+    XCUT -.decorates.-> L1
+    style CORE fill:#2da44e,color:#fff
+```
+
+---
+
+## 3. Request flow — a governed `POST /view`
+
+A client names a view + filters (no SQL); the foundation compiles safe,
+parameterized SQL and runs it through the pooled connection.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant V as Django async view
+    participant G as AuthGate
+    participant F as Facade / Handle
+    participant I as compile_view
+    participant P as Pool (metered, resilient, psycopg)
+    participant DB as PostgreSQL
+    C->>V: POST /view {name, filters, limit}
+    V->>V: validate DTO (400 on bad body)
+    V->>G: check(read, "main")   (no-op when auth off)
+    V->>F: handle.view(ViewQuery(...))
+    F->>I: compile_view(spec)
+    I-->>F: parameterized Query (values bound)
+    F->>P: acquire() (breaker gate · metrics timer)
+    P->>DB: execute(SQL, params)
+    DB-->>P: rows
+    P-->>F: ResultSet(rows, rowcount, elapsed_ms)
+    F-->>V: ResultSet
+    V-->>C: 200 {rows, row_count, elapsed_ms} + X-Request-Id
+```
+
+---
+
+## 4. Multiple data sources (bulkheads)
+
+Each named data source has its own pool + circuit breaker, so one busy or failing
+database cannot starve the others.
+
+```mermaid
+graph LR
+    REG[ConnectionRegistry]
+    REG -->|orders-primary| P1[Pool + breaker] --> DB1[(primary)]
+    REG -->|orders-replica| P2[Pool + breaker] --> DB2[(replica)]
+    REG -->|analytics| P3[Pool + breaker] --> DB3[(analytics)]
+    REG -->|... N| PN[Pool + breaker] --> DBN[(...)]
+```
+
+---
+
+## 5. Package & module structure
+
+```mermaid
+graph TB
+    subgraph repo[postgresqlmodule/code/packages]
+      subgraph core[pgfoundation · core library]
+        C_CORE[core/<br/>ports · models · errors]
+        C_CFG[_internal/config/<br/>settings · loader]
+        C_CONN[_internal/connection/<br/>registry · PoolFactory]
+        C_DRV[_internal/drivers/<br/>psycopg · fake · errors_map]
+        C_RES[_internal/resilience/<br/>circuit_breaker · pool]
+        C_OBS[_internal/observability/<br/>metered · noop]
+        C_ACC[_internal/access/<br/>invocation · uow · transactions<br/>interval · watermark · sql · repository]
+        C_API[_internal/api/<br/>facade · handle]
+        C_INIT[__init__.py<br/>public surface]
+      end
+      subgraph svc[pgfoundation_service · Django shell]
+        S_APP[asgi · settings · urls · run_local]
+        S_VIEW[views · schemas · openapi]
+        S_SEAM[auth · bootstrap · http_errors]
+      end
+    end
+    svc -->|depends on public surface| C_INIT
+    C_INIT --- C_API --- C_ACC --- C_CONN --- C_CFG --- C_CORE
+    C_DRV -.-> C_CORE
+    C_RES -.-> C_CONN
+    C_OBS -.-> C_CONN
+```
+
+---
+
+## 6. Deployment topology
+
+```mermaid
+graph LR
+    subgraph libmode[Library mode]
+      APP[Consumer Python app] --> LIB[pgfoundation<br/>in-process]
+      LIB --> PGa[(PostgreSQL)]
+    end
+    subgraph svcmode[Service mode]
+      CL[Any client] -->|REST + OpenAPI| SVC["pgfoundation_service<br/>(uvicorn ASGI, N workers)"]
+      SVC --> LIB2[pgfoundation] --> PGb[(PostgreSQL)]
+      SVC -.telemetry.-> OBS[external log project]
+    end
+```
+
+*Service mode also acts as a **connection concentrator**: a fleet of stateless
+service pods shares one bounded pool set, so PostgreSQL sees far fewer backends
+than every app pooling independently.*
+</script>
+  </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+function dark(){const t=document.documentElement.getAttribute('data-theme');if(t)return t==='dark';return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;}
+mermaid.initialize({startOnLoad:false,theme:dark()?'dark':'neutral',securityLevel:'loose'});
+const r=new marked.Renderer();const oc=r.code.bind(r);
+r.code=function(t){if((t.lang||'').trim()==='mermaid')return '<pre class="mermaid">'+t.text+'</pre>';return oc(t);};
+marked.setOptions({renderer:r,gfm:true,breaks:false});
+document.getElementById('content').innerHTML=marked.parse(document.getElementById('src').textContent);
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+const toc=document.getElementById('toc');const seen={};
+const heads=[...document.querySelectorAll('.rendered h2,.rendered h3')];
+heads.forEach(h=>{let id=slug(h.textContent);if(seen[id]!==undefined){seen[id]++;id=id+'-'+seen[id];}else seen[id]=0;h.id=id;
+ const a=document.createElement('a');a.href='#'+id;a.textContent=h.textContent;a.className='toc '+h.tagName.toLowerCase();a.dataset.target=id;toc.appendChild(a);
+ const an=document.createElement('a');an.href='#'+id;an.className='anchor';an.textContent='#';h.appendChild(an);});
+mermaid.run({querySelector:'.mermaid'}).catch(e=>console.warn('mermaid',e));
+const links=Object.fromEntries([...toc.querySelectorAll('a')].map(a=>[a.dataset.target,a]));
+new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){toc.querySelectorAll('a').forEach(a=>a.classList.remove('active'));if(links[en.target.id])links[en.target.id].classList.add('active');}}),{rootMargin:'-8% 0px -80% 0px'}).observe&&heads.forEach(h=>{});
+const spy=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){toc.querySelectorAll('a').forEach(a=>a.classList.remove('active'));if(links[en.target.id])links[en.target.id].classList.add('active');}}),{rootMargin:'-8% 0px -80% 0px'});
+heads.forEach(h=>spy.observe(h));
+function toggleTheme(){const c=document.documentElement.getAttribute('data-theme')||(dark()?'dark':'light');const n=c==='dark'?'light':'dark';try{localStorage.setItem('pgf-theme',n);}catch(e){}document.documentElement.setAttribute('data-theme',n);location.reload();}
+const sb=document.getElementById('sidebar');document.getElementById('menuBtn').addEventListener('click',()=>sb.classList.toggle('open'));toc.addEventListener('click',()=>sb.classList.remove('open'));
+</script>
+</body></html>
